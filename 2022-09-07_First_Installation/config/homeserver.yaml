@@ -1,0 +1,70 @@
+# Configuration file for Synapse.
+#
+# This is a YAML file: see [1] for a quick introduction. Note in particular
+# that *indentation is important*: all the elements of a list or dictionary
+# should have the same indentation.
+#
+# [1] https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+#
+# For more information on how to configure Synapse, including a complete accounting of
+# each option, go to docs/usage/configuration/config_documentation.md or
+# https://matrix-org.github.io/synapse/latest/usage/configuration/config_documentation.html
+#
+# This is set in /etc/matrix-synapse/conf.d/server_name.yaml for Debian installations.
+# server_name: "SERVERNAME"
+pid_file: "/var/run/matrix-synapse.pid"
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    bind_addresses: ['::1', '127.0.0.1']
+    resources:
+      - names: [client, federation]
+        compress: false
+log_config: "/etc/matrix-synapse/log.yaml"
+media_store_path: /var/lib/matrix-synapse/media
+signing_key_path: "/etc/matrix-synapse/homeserver.signing.key"
+trusted_key_servers:
+  - server_name: "matrix.org"
+
+# database
+database:
+  name: psycopg2
+  args:
+    user: synapse_db_user
+    password: 'REDACTED'
+    database: synapse_db
+    host: localhost
+    cp_min: 5
+    cp_max: 10
+
+# user defined
+public_baseurl: https://matrix.kgnet88.de/
+allow_public_rooms_without_auth: false
+filter_timeline_limit: 500
+block_non_admin_invites: true
+admin_contact: 'REDACTED'
+allow_per_room_profiles: false
+max_avatar_size: 4M
+user_ips_max_age: 14d
+max_upload_size: 50M
+url_preview_enabled: true
+url_preview_ip_range_blacklist:
+  - '127.0.0.0/8'
+  - '10.0.0.0/8'
+  - '172.16.0.0/12'
+  - '192.168.0.0/16'
+  - '100.64.0.0/10'
+  - '169.254.0.0/16'
+  - '::1/128'
+  - 'fe80::/64'
+  - 'fc00::/7'
+  - '192.168.178.0/24'
+enable_registration: false
+registration_shared_secret: 'REDACTED'
+enable_metrics: false
+report_stats: false
+push:
+  include_content: false
+serve_server_wellknown: true
